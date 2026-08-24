@@ -1,86 +1,61 @@
-pipeline{
+pipeline {
     agent any
 
     environment {
-
-        // EC2-2 private IP
         BACKEND_SERVER = "10.0.139.2"
-
-        // Docker image name
-        DOCKER_IMAGE = "student-backend"
-
-        // Docker container name
+        DOCKER_IMAGE   = "student-backend"
         CONTAINER_NAME = "student-backend"
-
-        // Backend port
-        BACKEND_PORT = "5000"
-
-        // Frontend directory on EC2-1
-        FRONTEND_DIR = "/var/www/student-frontend"
-
+        BACKEND_PORT   = "5000"
+        FRONTEND_DIR   = "/var/www/student-frontend"
     }
 
-    stages{
+    stages {
         stage("git checkout scm") {
-            steps{
+            steps {
                 git branch: 'main', credentialsId: 'Github', url: 'https://github.com/Madhavmadd/Devops-3-tier-project.git'
             }
-
         }
 
-        stage("Frontend Validation"){
-            steps{
+        stage("Frontend Validation") {
+            steps {
                 echo "Validating frontend files..."
-
                 sh '''
                     test -f frontend/index.html
                     test -f frontend/app.js
                     test -f frontend/style.css
-
                     echo "Frontend files are present"
                 '''
             }
         }
 
-        stage("Backend npm install"){
-            steps{
+        stage("Backend npm install") {
+            steps {
                 echo "Installing backend dependencies..."
-
                 sh '''
                     cd backend
-
                     npm install
                 '''
             }
         }
 
-        stage("backend test"){
-            steps{
+        stage("backend test") {
+            steps {
                 echo "Testing backend JavaScript..."
-
                 sh '''
                     cd backend
-
                     node --check server.js
-
                     echo "Backend syntax validation successful"
                 '''
             }
         }
 
-        stage("docker build"){
-            steps{
+        stage("docker build") {
+            steps {
                 echo "Building backend Docker image..."
-
                 sh '''
                     cd backend
-
-                    docker build \
-                    -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
-
-                    docker tag \
-                    ${DOCKER_IMAGE}:${BUILD_NUMBER} \
-                    ${DOCKER_IMAGE}:latest
+                    docker build -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
+                    docker tag ${DOCKER_IMAGE}:${BUILD_NUMBER} ${DOCKER_IMAGE}:latest
                 '''
             }
         }
@@ -88,26 +63,20 @@ pipeline{
         stage('Deploy Backend to EC2-2') {
             steps {
                 echo 'Deploying backend to EC2-2...'
-                sh '''
-                    docker save student-backend:10 | gzip | ssh -o StrictHostKeyChecking=no ubuntu@10.0.139.2 gunzip | docker load
-                    ssh -i /var/lib/jenkins/.ssh/id_ed25519 -o StrictHostKeyChecking=no ubuntu@10.0.139.2 <<'ENDSSH'
-                    set -e
-                    echo "Stopping old container..."
-                    docker stop student-backend || true
-                    echo "Removing old container..."
-                    docker rm student-backend || true
-                    echo "Starting new container..."
-                    docker run -d --name student-backend --restart unless-stopped -p 5000:5000 student-backend:10
-                    echo "Backend deployment completed"
-                    ENDSSH
-                    '''
+                sh """
+                    docker save ${DOCKER_IMAGE}:${BUILD_NUMBER} | gzip | ssh -o StrictHostKeyChecking=no ubuntu@${BACKEND_SERVER} gunzip | docker load
+                    ssh -i /var/lib/jenkins/.ssh/id_ed25519 -o StrictHostKeyChecking=no ubuntu@${BACKEND_SERVER} "
+                        set -e
+                        echo 'Stopping old container...'
+                        docker stop ${CONTAINER_NAME} || true
+                        echo 'Removing old container...'
+                        docker rm ${CONTAINER_NAME} || true
+                        echo 'Starting new container...'
+                        docker run -d --name ${CONTAINER_NAME} --restart unless-stopped -p ${BACKEND_PORT}:${BACKEND_PORT} ${DOCKER_IMAGE}:${BUILD_NUMBER}
+                        echo 'Backend deployment completed'
+                    "
+                """
             }
         }
-        
     }
-
 }
-
-
-
-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
