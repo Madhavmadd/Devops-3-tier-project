@@ -71,9 +71,44 @@ pipeline {
                 '''
             }
         }
+
+        stage('Nginx Reload') {
+
+            steps {
+
+                echo "Testing and reloading Nginx..."
+
+                sh '''
+                    sudo nginx -t
+
+                    sudo systemctl reload nginx
+
+                    echo "Nginx reloaded successfully"
+                '''
+            }
+        }
+
+        stage('Health Check') {
+
+            steps {
+
+                echo "Checking backend health..."
+
+                sh '''
+                    sleep 5
+
+                    curl -f \
+                    http://${BACKEND_SERVER}:${BACKEND_PORT}/api/health
+
+                    echo ""
+
+                    echo "Backend health check successful"
+                '''
+            }
+        }
     }
 }
 
 
 
-
+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
