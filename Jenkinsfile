@@ -99,8 +99,10 @@ pipeline{
 
 
                 sh '''
-                    ssh -o StrictHostKeyChecking=no \
-                    ubuntu@${BACKEND_SERVER} '
+                    ssh \
+                    -i /var/lib/jenkins/.ssh/id_ed25519 \
+                    -o StrictHostKeyChecking=no \
+                    ubuntu@${BACKEND_SERVER}
 
                         echo "Stopping old container..."
 
