@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
-    <title>SkillLearn - Student Course Registration</title>
+    <title>StudentHub - Course Registration</title>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -14,24 +13,22 @@
 <body>
 
 <header>
-    <div class="logo">SkillLearn</div>
+    <div class="logo">StudentHub</div>
 
     <nav>
-        <a href="#home">Home</a>
         <a href="#courses">Courses</a>
         <a href="#register">Register</a>
+        <a href="#students">Students</a>
     </nav>
 </header>
 
-
-<section id="home" class="hero">
+<section class="hero">
 
     <div>
-        <h1>Learn Skills That Build Your Career</h1>
+        <h1>Learn Skills. Build Your Future.</h1>
 
         <p>
-            Register for industry-focused courses
-            and start learning today.
+            Register for professional courses and start learning today.
         </p>
 
         <a href="#courses" class="button">
@@ -41,72 +38,15 @@
 
 </section>
 
-
-<section id="courses">
+<section id="courses" class="container">
 
     <h2>Popular Courses</h2>
 
-    <div class="courses">
-
-        <div class="course">
-
-            <h3>AWS & DevOps</h3>
-
-            <p>
-                Learn AWS, Linux, Docker,
-                Jenkins and DevOps.
-            </p>
-
-            <h4>₹9,999</h4>
-
-            <button onclick="selectCourse('AWS & DevOps')">
-                Register
-            </button>
-
-        </div>
-
-
-        <div class="course">
-
-            <h3>Python Programming</h3>
-
-            <p>
-                Learn Python from beginner
-                to advanced level.
-            </p>
-
-            <h4>₹7,999</h4>
-
-            <button onclick="selectCourse('Python Programming')">
-                Register
-            </button>
-
-        </div>
-
-
-        <div class="course">
-
-            <h3>Full Stack Development</h3>
-
-            <p>
-                Learn HTML, CSS, JavaScript,
-                Node.js and databases.
-            </p>
-
-            <h4>₹11,999</h4>
-
-            <button onclick="selectCourse('Full Stack Development')">
-                Register
-            </button>
-
-        </div>
-
-    </div>
+    <div id="courseList" class="courses"></div>
 
 </section>
 
-
-<section id="register">
+<section id="register" class="registration">
 
     <h2>Student Registration</h2>
 
@@ -115,7 +55,7 @@
         <input
             type="text"
             id="name"
-            placeholder="Full Name"
+            placeholder="Student Name"
             required
         >
 
@@ -127,7 +67,7 @@
         >
 
         <input
-            type="tel"
+            type="text"
             id="phone"
             placeholder="Phone Number"
             required
@@ -137,18 +77,6 @@
 
             <option value="">
                 Select Course
-            </option>
-
-            <option value="AWS & DevOps">
-                AWS & DevOps
-            </option>
-
-            <option value="Python Programming">
-                Python Programming
-            </option>
-
-            <option value="Full Stack Development">
-                Full Stack Development
             </option>
 
         </select>
@@ -163,17 +91,30 @@
 
 </section>
 
+<section id="students" class="container">
 
-<footer>
+    <h2>Registered Students</h2>
 
-    <p>
-        © 2026 SkillLearn
-    </p>
+    <table>
 
-</footer>
+        <thead>
 
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Course</th>
+            </tr>
 
-<script src="java.js"></script>
+        </thead>
+
+        <tbody id="studentList"></tbody>
+
+    </table>
+
+</section>
+
+<script src="app.js"></script>
 
 </body>
 </html>
