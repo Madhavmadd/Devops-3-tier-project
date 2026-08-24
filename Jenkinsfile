@@ -41,10 +41,35 @@ pipeline{
                 '''
             }
         }
+
+        stage("Backend npm install"){
+            steps{
+                echo "Installing backend dependencies..."
+
+                sh '''
+                    cd backend
+
+                    npm install
+                '''
+            }
+        }
+
+        stage("backend test"){
+            steps{
+                echo "Testing backend JavaScript..."
+
+                sh '''
+                    cd backend
+
+                    node --check server.js
+
+                    echo "Backend syntax validation successful"
+                '''
+            }
+        }
         
     }
 
 }
-
 
 
