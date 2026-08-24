@@ -48,5 +48,31 @@ pipeline {
                 """
             }
         }
+
+        stage("Deploy fronend to EC2-1"){
+            steps {
+
+                echo "Deploying frontend..."
+
+                sh '''
+                    sudo mkdir -p ${FRONTEND_DIR}
+
+                    sudo cp frontend/index.html \
+                    ${FRONTEND_DIR}/
+
+                    sudo cp frontend/app.js \
+                    ${FRONTEND_DIR}/
+
+                    sudo cp frontend/style.css \
+                    ${FRONTEND_DIR}/
+
+                    echo "Frontend deployment completed"
+                '''
+            }
+        }
     }
 }
+
+
+
+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
