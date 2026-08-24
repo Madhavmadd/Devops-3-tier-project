@@ -87,20 +87,24 @@ pipeline{
 
         stage('Deploy Backend to EC2-2') {
             steps {
-                echo 'Deploying backend to EC2-2...'
-                sh '''
-                    docker save student-backend:10 | gzip | ssh -o StrictHostKeyChecking=no ubuntu@10.0.139.2 gunzip | docker load
-                    ssh -i /var/lib/jenkins/.ssh/id_ed25519 -o StrictHostKeyChecking=no ubuntu@10.0.139.2 <<'ENDSSH'
-                    set -e
-                    echo "Stopping old container..."
-                    docker stop student-backend || true
-                    echo "Removing old container..."
-                    docker rm student-backend || true
-                    echo "Starting new container..."
-                    docker run -d --name student-backend --restart unless-stopped -p 5000:5000 student-backend:10
-                    echo "Backend deployment completed"
-                    ENDSSH
-                    '''
+                stage('Deploy Backend to EC2-2') {
+    steps {
+        echo 'Deploying backend to EC2-2...'
+        sh '''
+            docker save student-backend:10 | gzip | ssh -o StrictHostKeyChecking=no ubuntu@10.0.139.2 gunzip | docker load
+            ssh -i /var/lib/jenkins/.ssh/id_ed25519 -o StrictHostKeyChecking=no ubuntu@10.0.139.2 '
+                set -e
+                echo "Stopping old container..."
+                docker stop student-backend || true
+                echo "Removing old container..."
+                docker rm student-backend || true
+                echo "Starting new container..."
+                docker run -d --name student-backend --restart unless-stopped -p 5000:5000 student-backend:10
+                echo "Backend deployment completed"
+            '
+        '''
+    }
+}
             }
         }
         
