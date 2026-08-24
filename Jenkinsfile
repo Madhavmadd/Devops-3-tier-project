@@ -27,9 +27,25 @@ pipeline{
             }
 
         }
+
+        stage("Frontend Validation"){
+            steps{
+                echo "Validating frontend files..."
+
+                sh '''
+                    test -f frontend/index.html
+                    test -f frontend/app.js
+                    test -f frontend/style.css
+
+                    echo "Frontend files are present"
+                '''
+            }
+        }
+        
     }
 
 }
 
 
 
+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
