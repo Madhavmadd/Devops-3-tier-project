@@ -67,9 +67,67 @@ pipeline{
                 '''
             }
         }
+
+        stage("docker build"){
+            steps{
+                echo "Building backend Docker image..."
+
+                sh '''
+                    cd backend
+
+                    docker build \
+                    -t ${DOCKER_IMAGE}:${BUILD_NUMBER} .
+
+                    docker tag \
+                    ${DOCKER_IMAGE}:${BUILD_NUMBER} \
+                    ${DOCKER_IMAGE}:latest
+                '''
+            }
+        }
+
+        stage("Deploy Backend to EC2-2"){
+            steps{
+                echo "Deploying backend to EC2-2..."
+
+                sh '''
+                    docker save ${DOCKER_IMAGE}:${BUILD_NUMBER} \
+                    | gzip \
+                    | ssh -o StrictHostKeyChecking=no \
+                    ubuntu@${BACKEND_SERVER} \
+                    'gunzip | docker load'
+                '''
+
+
+                sh '''
+                    ssh -o StrictHostKeyChecking=no \
+                    ubuntu@${BACKEND_SERVER} '
+
+                        echo "Stopping old container..."
+
+                        docker stop ${CONTAINER_NAME} || true
+
+                        echo "Removing old container..."
+
+                        docker rm ${CONTAINER_NAME} || true
+
+                        echo "Starting new container..."
+
+                        docker run -d \
+                        --name ${CONTAINER_NAME} \
+                        --restart unless-stopped \
+                        -p ${BACKEND_PORT}:5000 \
+                        ${DOCKER_IMAGE}:${BUILD_NUMBER}
+
+                        echo "Backend deployment completed"
+
+                    '
+                '''
+            }
+        }
         
     }
 
 }
+
 
 
