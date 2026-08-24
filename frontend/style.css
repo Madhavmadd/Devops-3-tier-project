@@ -1,179 +1,142 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7fb;
+    color: #222;
+}
 
-    <title>SkillLearn - Student Course Registration</title>
+header {
+    background: #111827;
+    color: white;
+    padding: 20px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    <link rel="stylesheet" href="style.css">
-</head>
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+}
 
-<body>
+nav a {
+    color: white;
+    text-decoration: none;
+    margin-left: 25px;
+}
 
-<header>
-    <div class="logo">SkillLearn</div>
+.hero {
+    min-height: 400px;
+    padding: 100px 8%;
+    background: linear-gradient(
+        135deg,
+        #4f46e5,
+        #7c3aed
+    );
+    color: white;
+}
 
-    <nav>
-        <a href="#home">Home</a>
-        <a href="#courses">Courses</a>
-        <a href="#register">Register</a>
-    </nav>
-</header>
+.hero h1 {
+    font-size: 48px;
+    max-width: 650px;
+    margin-bottom: 20px;
+}
 
+.hero p {
+    font-size: 20px;
+    margin-bottom: 30px;
+}
 
-<section id="home" class="hero">
+.button {
+    display: inline-block;
+    background: white;
+    color: #4f46e5;
+    padding: 14px 25px;
+    text-decoration: none;
+    border-radius: 6px;
+}
 
-    <div>
-        <h1>Learn Skills That Build Your Career</h1>
+section {
+    padding: 60px 8%;
+}
 
-        <p>
-            Register for industry-focused courses
-            and start learning today.
-        </p>
+section h2 {
+    text-align: center;
+    margin-bottom: 35px;
+}
 
-        <a href="#courses" class="button">
-            Explore Courses
-        </a>
-    </div>
+.courses {
+    display: flex;
+    gap: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
 
-</section>
+.course {
+    background: white;
+    padding: 30px;
+    width: 300px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
 
+.course h3 {
+    margin-bottom: 15px;
+}
 
-<section id="courses">
+.course p {
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
 
-    <h2>Popular Courses</h2>
+.course h4 {
+    margin-bottom: 20px;
+    font-size: 22px;
+}
 
-    <div class="courses">
+button {
+    border: none;
+    background: #4f46e5;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-        <div class="course">
+form {
+    max-width: 500px;
+    margin: auto;
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+}
 
-            <h3>AWS & DevOps</h3>
+input,
+select {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
 
-            <p>
-                Learn AWS, Linux, Docker,
-                Jenkins and DevOps.
-            </p>
+form button {
+    width: 100%;
+}
 
-            <h4>₹9,999</h4>
+#message {
+    text-align: center;
+    margin-top: 20px;
+}
 
-            <button onclick="selectCourse('AWS & DevOps')">
-                Register
-            </button>
-
-        </div>
-
-
-        <div class="course">
-
-            <h3>Python Programming</h3>
-
-            <p>
-                Learn Python from beginner
-                to advanced level.
-            </p>
-
-            <h4>₹7,999</h4>
-
-            <button onclick="selectCourse('Python Programming')">
-                Register
-            </button>
-
-        </div>
-
-
-        <div class="course">
-
-            <h3>Full Stack Development</h3>
-
-            <p>
-                Learn HTML, CSS, JavaScript,
-                Node.js and databases.
-            </p>
-
-            <h4>₹11,999</h4>
-
-            <button onclick="selectCourse('Full Stack Development')">
-                Register
-            </button>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<section id="register">
-
-    <h2>Student Registration</h2>
-
-    <form id="registrationForm">
-
-        <input
-            type="text"
-            id="name"
-            placeholder="Full Name"
-            required
-        >
-
-        <input
-            type="email"
-            id="email"
-            placeholder="Email"
-            required
-        >
-
-        <input
-            type="tel"
-            id="phone"
-            placeholder="Phone Number"
-            required
-        >
-
-        <select id="course" required>
-
-            <option value="">
-                Select Course
-            </option>
-
-            <option value="AWS & DevOps">
-                AWS & DevOps
-            </option>
-
-            <option value="Python Programming">
-                Python Programming
-            </option>
-
-            <option value="Full Stack Development">
-                Full Stack Development
-            </option>
-
-        </select>
-
-        <button type="submit">
-            Register Now
-        </button>
-
-    </form>
-
-    <p id="message"></p>
-
-</section>
-
-
-<footer>
-
-    <p>
-        © 2026 SkillLearn
-    </p>
-
-</footer>
-
-
-<script src="java.js"></script>
-
-</body>
-</html>
+footer {
+    background: #111827;
+    color: white;
+    text-align: center;
+    padding: 25px;
+}
