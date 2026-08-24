@@ -5,6 +5,7 @@ pipeline {
         DOCKER_IMAGE   = "student-backend"
         CONTAINER_NAME = "student-backend"
         BACKEND_PORT   = "5000"
+        FRONTEND_DIR   = "/var/www/html"
     }
     stages {
         stage("git checkout scm") {
