@@ -85,51 +85,25 @@ pipeline{
             }
         }
 
-        stage("Deploy Backend to EC2-2"){
-            steps{
-                echo "Deploying backend to EC2-2..."
-
+        stage('Deploy Backend to EC2-2') {
+            steps {
+                echo 'Deploying backend to EC2-2...'
                 sh '''
-                    docker save ${DOCKER_IMAGE}:${BUILD_NUMBER} \
-                    | gzip \
-                    | ssh -o StrictHostKeyChecking=no \
-                    ubuntu@${BACKEND_SERVER} \
-                    'gunzip | docker load'
-                '''
-
-
-                sh '''
-                    ssh \
-                    -i /var/lib/jenkins/.ssh/id_ed25519 \
-                    -o StrictHostKeyChecking=no \
-                    ubuntu@${BACKEND_SERVER}
-
-                        echo "Stopping old container..."
-
-                        docker stop ${CONTAINER_NAME} || true
-
-                        echo "Removing old container..."
-
-                        docker rm ${CONTAINER_NAME} || true
-
-                        echo "Starting new container..."
-
-                        docker run -d \
-                        --name ${CONTAINER_NAME} \
-                        --restart unless-stopped \
-                        -p ${BACKEND_PORT}:5000 \
-                        ${DOCKER_IMAGE}:${BUILD_NUMBER}
-
-                        echo "Backend deployment completed"
-
-                    '
-                '''
+                    docker save student-backend:10 | gzip | ssh -o StrictHostKeyChecking=no ubuntu@10.0.139.2 gunzip | docker load
+                    ssh -i /var/lib/jenkins/.ssh/id_ed25519 -o StrictHostKeyChecking=no ubuntu@10.0.139.2 <<'ENDSSH'
+                    set -e
+                    echo "Stopping old container..."
+                    docker stop student-backend || true
+                    echo "Removing old container..."
+                    docker rm student-backend || true
+                    echo "Starting new container..."
+                    docker run -d --name student-backend --restart unless-stopped -p 5000:5000 student-backend:10
+                    echo "Backend deployment completed"
+                    ENDSSH
+                    '''
             }
         }
         
     }
 
 }
-
-
-
