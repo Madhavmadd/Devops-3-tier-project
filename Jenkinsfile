@@ -67,12 +67,14 @@ pipeline {
                     docker save ${DOCKER_IMAGE}:${BUILD_NUMBER} | gzip | ssh -o StrictHostKeyChecking=no ubuntu@${BACKEND_SERVER} gunzip | docker load
                     ssh -i /var/lib/jenkins/.ssh/id_ed25519 -o StrictHostKeyChecking=no ubuntu@${BACKEND_SERVER} "
                         set -e
+                        echo 'Listing Docker images after load:'
+                        docker images --format 'table {{.Repository}}:{{.Tag}}\t{{.ID}}'
                         echo 'Stopping old container...'
                         docker stop ${CONTAINER_NAME} || true
                         echo 'Removing old container...'
                         docker rm ${CONTAINER_NAME} || true
-                        echo 'Starting new container...'
-                        docker run -d --name ${CONTAINER_NAME} --restart unless-stopped -p ${BACKEND_PORT}:${BACKEND_PORT} ${DOCKER_IMAGE}:${BUILD_NUMBER}
+                        echo 'Starting new container with --pull never...'
+                        docker run -d --pull never --name ${CONTAINER_NAME} --restart unless-stopped -p ${BACKEND_PORT}:${BACKEND_PORT} ${DOCKER_IMAGE}:${BUILD_NUMBER}
                         echo 'Backend deployment completed'
                     "
                 """
