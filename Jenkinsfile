@@ -6,6 +6,7 @@ pipeline {
         CONTAINER_NAME = "student-backend"
         BACKEND_PORT   = "5000"
         FRONTEND_DIR   = "/var/www/html"
+        DATA_DIR       = "/home/ubuntu/student-data"
     }
     stages {
         stage("git checkout scm") {
@@ -42,15 +43,17 @@ pipeline {
                         docker stop ${CONTAINER_NAME} || true
                         echo 'Removing old container...'
                         docker rm ${CONTAINER_NAME} || true
+                        echo 'Ensuring persistent data directory exists...'
+                        mkdir -p ${DATA_DIR}
                         echo 'Starting new container...'
-                        docker run -d --name ${CONTAINER_NAME} --restart unless-stopped -p ${BACKEND_PORT}:${BACKEND_PORT} ${DOCKER_IMAGE}:${BUILD_NUMBER}
+                        docker run -d --name ${CONTAINER_NAME} --restart unless-stopped -p ${BACKEND_PORT}:${BACKEND_PORT} -v ${DATA_DIR}:/app ${DOCKER_IMAGE}:${BUILD_NUMBER}
                         echo 'Backend deployment completed'
                     "
                 """
             }
         }
 
-        stage("Deploy fronend to EC2-1"){
+        stage("Deploy frontend to EC2-1"){
             steps {
 
                 echo "Deploying frontend..."
@@ -108,7 +111,3 @@ pipeline {
         }
     }
 }
-
-
-
-
