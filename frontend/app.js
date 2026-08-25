@@ -1,4 +1,5 @@
-const API_URL = "http://10.0.139.2:5000";
+#const API_URL = "http://10.0.139.2:5000";
+const API_URL = "";
 
 const courseList = document.getElementById("courseList");
 const courseSelect = document.getElementById("course");
