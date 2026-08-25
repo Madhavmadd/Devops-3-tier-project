@@ -43,10 +43,11 @@ pipeline {
                         docker stop ${CONTAINER_NAME} || true
                         echo 'Removing old container...'
                         docker rm ${CONTAINER_NAME} || true
-                        echo 'Ensuring persistent data directory exists...'
+                        echo 'Ensuring persistent data directory and db file exist...'
                         mkdir -p ${DATA_DIR}
+                        touch ${DATA_DIR}/students.db
                         echo 'Starting new container...'
-                        docker run -d --name ${CONTAINER_NAME} --restart unless-stopped -p ${BACKEND_PORT}:${BACKEND_PORT} -v ${DATA_DIR}:/app ${DOCKER_IMAGE}:${BUILD_NUMBER}
+                        docker run -d --name ${CONTAINER_NAME} --restart unless-stopped -p ${BACKEND_PORT}:${BACKEND_PORT} -v ${DATA_DIR}/students.db:/app/students.db ${DOCKER_IMAGE}:${BUILD_NUMBER}
                         echo 'Backend deployment completed'
                     "
                 """
